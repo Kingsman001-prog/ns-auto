@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Business Chat | Njie & Sissoho Auto Ventures</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .chat-app {
+      width: 100%;
+      height: 100vh;
+      background: #fff;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 28%;
+      background: #fff;
+      border-right: 1px solid #eaeaea;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+      background: #1e3c72;
+      color: #fff;
+      padding: 15px 20px;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    .contact {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 20px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .contact:hover {
+      background: #f0f2f5;
+    }
+
+    .contact img {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .contact .name {
+      font-weight: 500;
+      color: #333;
+    }
+
+    /* Chat area */
+    .chat-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #f9f9f9;
+    }
+
+    .chat-header {
+      background: #fff;
+      padding: 6px 10px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid #eaeaea;
+    }
+
+    .chat-header img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 12px;
+    }
+
+    .chat-header .name {
+      font-weight: 600;
+      color: #333;
+    }
+
+    .chat-header .status {
+      font-size: 12px;
+      color: #00b894;
+    }
+
+    .messages {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .message {
+      max-width: 70%;
+      padding: 12px 16px;
+      border-radius: 18px;
+      margin: 6px 0;
+      font-size: 14px;
+      line-height: 1.4;
+      word-wrap: break-word;
+    }
+
+    .message.sent {
+      background: #1e3c72;
+      color: #fff;
+      align-self: flex-end;
+    }
+
+    .message.received {
+      background: #fff;
+      color: #333;
+      align-self: flex-start;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .sender {
+      display: flex;
+      align-items: center;
+      padding: 12px 20px;
+      background: #fff;
+      border-top: 1px solid #eaeaea;
+    }
+
+    .sender input {
+      flex: 1;
+      border: none;
+      outline: none;
+      padding: 12px 16px;
+      border-radius: 20px;
+      background: #f1f1f1;
+      font-size: 14px;
+    }
+
+    .sender button {
+      margin-left: 10px;
+      background: #1e3c72;
+      color: #fff;
+      border: none;
+      border-radius: 20px;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s ease;
+    }
+
+    .sender button:hover {
+      background: #2a5298;
+    }
+    
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .chat-app {
+        flex-direction: column;
+      }
+      .sidebar {
+        width: 100%;
+        height: 30%;
+        border-right: none;
+        border-bottom: 1px solid #eaeaea;
+      }
+      .chat-area {
+        height: 70%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-app">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-header"><p>Chat Client</p> <a href="/"><- Back</a></div>
+      <div class="contact">
+        <img src="./images/honda_white.jpeg" alt="">
+        <div class="name">Muhammed Sankoh</div>
+      </div>
+      <div class="contact">
+        <img src="./images/black_chevrolet.jpeg" alt="">
+        <div class="name">Ebrahima Njie</div>
+      </div>
+    </div>
+
+    <!-- Chat Area -->
+    <div class="chat-area">
+      <div class="chat-header">
+        <img src="./images/kia.jpeg" alt="">
+        <div>
+          <div class="name">Muhammed Sankoh</div>
+          <div class="status">Present</div>
+        </div>
+      </div>
+
+      <div class="messages">
+        <div class="message received">Hello Muhammed, welcome to Njie & Sissoho Auto Ventures!</div>
+        <div class="message sent">Hi, thank you! I’d like to ask about the new mattress line.</div>
+        <div class="message received">Sure! We have premium orthopedic and luxury models available.</div>
+      </div>
+
+      <div class="sender">
+        <input type="text" placeholder="Type a message...">
+        <button>Send</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,306 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body{
+    position: fixed;
+    width: 100%;
+}
+
+/* Top navigation */
+.lp-tp-nav {
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
+  padding: 10px 20px;
+}
+
+.lp-tp-nav nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mb-logo h3 {
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.lp-search input {
+  padding: 6px;
+  border-radius: 4px;
+  border: none;
+  outline: none;
+}
+
+.lp-search button {
+  padding: 6px 12px;
+  margin-left: 5px;
+  border: none;
+  background: #ff7e5f;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.lp-profile {
+  width: 150px;
+  display: flex;
+  align-items: center;
+  color: #fff;
+}
+.user-info p{
+  font-size: 12px;
+}
+
+.mb-profile .n {
+  background: #ff7e5f;
+  color: #fff;
+  border-radius: 50%;
+  padding: 5px;
+  margin-right: 10px;
+}
+.container{
+    overflow-y: auto;
+    width: 100%;
+    height: 90vh;
+}
+
+/* Hero section */
+.lp-auto-img {
+  background-image: url("./images/honda_white.jpeg");
+  background-size: cover;
+  background-position: center;
+  height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.lp-auto-img::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+}
+
+.bk-info {
+  position: relative;
+  text-align: center;
+  color: #fff;
+  z-index: 1;
+}
+
+.bsn-name h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 3rem;
+  margin-bottom: 15px;
+}
+
+.find-car h2 {
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.8rem;
+  margin-bottom: 30px;
+}
+
+/* Feature cards */
+.bsn-card {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+}
+
+.bsn-card div {
+  background: rgba(255,255,255,0.1);
+  padding: 20px;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+}
+
+.bsn-card div:hover {
+  transform: translateY(-5px);
+}
+
+.bsn-card p {
+  font-weight: 600;
+}
+
+.bsn-card span {
+  font-size: 0.9rem;
+  color: #ddd;
+}
+.car-list{
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  padding: 20px 0;
+}
+.card-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.card {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  margin: 10px 5px;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.card-content {
+  padding: 15px;
+  flex: 1;
+}
+
+.card-content h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #1e3c72;
+}
+
+.card-content p {
+  margin-bottom: 6px;
+  color: #555;
+}
+
+.card-content .card-price {
+  font-weight: 600;
+  color: #333;
+}
+
+.card-actions {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 15px;
+  border-top: 1px solid #eee;
+}
+
+.card-actions a {
+  flex: 1;
+  margin: 0 5px;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s ease;
+  text-decoration: none;
+}
+
+.view-btn {
+  text-align: center;
+  background: #1e3c72;
+  color: #fff;
+}
+
+.view-btn:hover {
+  background: #2a5298;
+}
+
+.chat-btn {
+  text-align: center;
+  background: #f4f6f9;
+  color: #333;
+}
+
+.chat-btn:hover {
+  background: #ddd;
+}
+
+
+.chart {
+  font-size: 0.9rem;
+  color: #28a745;
+}
+
+nav ul{
+  gap: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+nav ul li{
+  list-style: none;
+}
+nav ul li a{
+  text-decoration: none;
+  color: white;
+}
+.signup{
+  text-decoration: none;
+  background: #ff7e5f;
+  padding: 0.5rem 0.5rem;
+  border-radius: 5px;
+  color: white;
+}
+/* Responsive */
+@media (max-width: 992px) {
+  .bsn-name h1 {
+    font-size: 2.2rem;
+  }
+  .find-car h2 {
+    font-size: 1.4rem;
+  }
+  nav{
+    position: relative;
+    padding: 0;
+  }
+  nav .profile{
+    position: absolute;
+    right: 0;
+    top: 1px;
+  }
+  .lp-search{
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+    width: 100%;
+  }
+  .bsn-card{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .bsn-card div{
+    width: 80%;
+  }
+  .car-list{
+    padding-bottom: 5rem;
+  }
+  nav ul{
+    width: 100%;
+  }
+}
+@media (max-width: 600px) {
+  .lp-tp-nav nav {
+    padding: 0;
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .bsn-name h1 {
+    font-size: 1.8rem;
+  }
+  .find-car h2 {
+    font-size: 1rem;
+  }
+  
+  
+}

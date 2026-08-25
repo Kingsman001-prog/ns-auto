@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload | Njie & Sissoho Auto Ventures</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    body {
+      background: #f4f6f9;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    nav {
+      width: 100%;
+      background: #1e3c72;
+      color: #fff;
+      padding: 15px 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    nav .logo {
+      font-size: 1.2rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    nav .back {
+      cursor: pointer;
+      font-size: 1rem;
+      color: #fff;
+      transition: opacity 0.3s ease;
+    }
+
+    nav .back:hover {
+      opacity: 0.7;
+    }
+
+    .upload-container {
+      background: #fff;
+      margin-top: 40px;
+      padding: 30px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .upload-container h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 1.8rem;
+      color: #1e3c72;
+      letter-spacing: 1px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    select, input[type="text"], input[type="file"], input[type="submit"] {
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    select, input[type="text"], input[type="file"] {
+      background: #f9f9f9;
+      color: #333;
+    }
+
+    input[type="submit"] {
+      background: #1e3c72;
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      border: none;
+    }
+
+    input[type="submit"]:hover {
+      background: #2a5298;
+    }
+
+    .upload {
+      border: 2px dashed #1e3c72;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      background: #fdfdfd;
+    }
+
+    .upload:hover {
+      background: #f0f4ff;
+    }
+
+    @media (max-width: 600px) {
+      .upload-container {
+        padding: 20px;
+      }
+
+      .upload-container h2 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="logo">Njie & Sissoho Auto Ventures</div>
+    <div class="back"><a href="/"> <- Back</a></div>
+  </nav>
+
+  <div class="upload-container">
+    <h2>Upload Product Details</h2>
+    <form id="uploadForm" enctype="multipart/form-data">
+      <!-- Product Category -->
+      <select id="category" name="category" required>
+        <option value="">Select Category</option>
+        <option value="car">Car</option>
+        <option value="mattress">Mattress</option>
+      </select>
+
+      <!-- File Upload -->
+      <input type="file" id="upload" name="image" class="upload">
+
+      <!-- Common Fields -->
+      <input type="text" id="brand" name="brand" placeholder="Brand">
+      <input type="text" id="model" name="model" placeholder="Model / Type">
+      <input type="text" id="price" name="price" placeholder="Price">
+
+      <!-- Mattress-specific field -->
+      <input type="text" id="size" name="size" placeholder="Size (e.g., King, Queen)" style="display:none;">
+
+      <input type="submit" value="Submit">
+    </form>
+  </div>
+
+  <script>
+    const categorySelect = document.getElementById('category');
+    const sizeField = document.getElementById('size');
+
+    categorySelect.addEventListener('change', () => {
+      sizeField.style.display = categorySelect.value === 'mattress' ? 'block' : 'none';
+    });
+
+    document.getElementById("uploadForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const user_id = localStorage.getItem("user_id");
+
+      const formData = new FormData();
+      formData.append("category", document.getElementById("category").value);
+      formData.append("brand", document.getElementById("brand").value);
+      formData.append("model", document.getElementById("model").value);
+      formData.append("price", document.getElementById("price").value);
+      formData.append("size", document.getElementById("size").value || "");
+      formData.append("year", "");
+      formData.append("fuel_type", "");
+      formData.append("description", "Uploaded via form");
+      formData.append("user_id", user_id);
+
+      const file = document.getElementById("upload").files[0];
+      if (file) {
+        formData.append("image", file); // ✅ matches Multer's "image"
+      }
+
+      try {
+        // ✅ Use your backend API URL
+        const res = await fetch("https://ns-auto-ventures.onrender.com/api/products", {
+          method: "POST",
+          body: formData
+        });
+
+        const data = await res.json();
+        if (!res.ok) {
+          console.error("Upload failed:", data.error);
+          alert(`Upload failed: ${data.error}`);
+          return;
+        }
+
+        console.log("Upload successful:", data);
+        alert("Upload successful!");
+      } catch (err) {
+        console.error("Error:", err);
+        alert("An error occurred. Please try again.");
+      }
+    });
+  </script>
+</body>
+</html>

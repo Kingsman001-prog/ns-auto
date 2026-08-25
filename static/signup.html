@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signup | Njie & Sissoho Auto Ventures</title>
+  <style>
+    body {
+      background: #f4f6f9;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .signup-container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      width: 90%;
+      max-width: 400px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #1e3c72;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    input {
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+    button {
+      background: #1e3c72;
+      color: #fff;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #2a5298;
+    }
+    .signup-back {
+      position: absolute;
+      left: 1rem;
+      top: 1rem;
+      color: black;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <a class="signup-back" href="/"><- Back</a>
+  <div class="signup-container">
+    <h2>Create Account</h2>
+    <form id="signupForm">
+      <input type="text" id="username" placeholder="Username" required>
+      <input type="text" id="full_name" placeholder="Full Name" required>
+      <input type="email" id="email" placeholder="Email" required>
+      <input type="password" id="password" placeholder="Password" required>
+      <button type="submit">Signup</button>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById("signupForm");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const user = {
+        username: document.getElementById("username").value.trim(),
+        full_name: document.getElementById("full_name").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        password: document.getElementById("password").value.trim()
+      };
+
+      try {
+        // ✅ Use your backend URL (Render/Railway/Heroku)
+        const res = await fetch("https://ns-auto-ventures.onrender.com/api/signup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(user)
+        });
+
+        if (!res.ok) {
+          console.error("Server returned:", res.status);
+          alert("Signup failed. Please try again.");
+          return;
+        }
+
+        const data = await res.json();
+
+        if (data.success) {
+          alert(data.message);
+          localStorage.setItem("user_id", data.user_id);
+        } else {
+          alert(data.message || data.check || "Signup failed");
+        }
+
+        // Reset form fields
+        form.reset();
+
+      } catch (err) {
+        console.error("Error during signup:", err);
+        alert("An error occurred. Please try again.");
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>Njie & Sissoho Auto ventures</title>
+</head>
+<body>
+  <div class="lp-tp-nav mb-tp-nav">
+    <nav>
+      <div class="lp-logo mb-logo">
+        <h3>NS Auto Ventures</h3>
+        <div class="lp-search mp-search">
+          <input type="text" id="searchInput" placeholder="Search by brand/model">
+          <button onclick="filterProducts()">Search</button>
+        </div>
+      </div>
+      <ul>
+        <li><a href="#">Car</a></li>
+        <li><a href="#">Mattress</a></li>
+        <li><a href="#">View</a></li>
+        <li><a href="/upload">Upload</a></li>
+      </ul>
+      <div class="profile">
+        <a href="/signup" class="signup" id="sign-btn">Signup</a>
+        <div class="lp-profile mb-profile" id="userInfo" style="display: none;">
+          <div class="user-info">
+            <p>Hi, <span id="name"></span></p>
+            <p><span id="email"></span></p>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <div class="container">
+    <div class="lp-auto-img">
+      <div class="bk-info">
+        <div class="bsn-name">
+          <h1>Njie & Sissoho Auto Ventures</h1>
+        </div>
+        <div class="find-car">
+          <h2>Find your dream car <br/> Auto ventures</h2>
+        </div>
+        <div class="bsn-card">
+          <div><p>Quality Used Cars <br/> <span>Ciserall searaopteding</span></p></div>
+          <div><p>Direct import <br/> <span>Ciserall searaopteding</span></p></div>
+          <div><p>Affordable Prices <br/> <span>Ciserall searaopteding</span></p></div>
+          <div><p>Financing Available <br/> <span>Ciserall searaopteding</span></p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="car-list" id="carList">
+      <!-- Products will be injected here -->
+    </div>
+  </div>
+
+<script>
+  // --- USER SIGNUP DISPLAY ---
+  async function signup() {
+    try {
+      const res = await fetch("https://ns-auto-ventures.onrender.com/api/users");
+      if (!res.ok) {
+        console.error("Server returned:", res.status);
+        return;
+      }
+      const data = await res.json();
+      if (data.success && data.users.length > 0) {
+        const user = data.users[0];
+        document.getElementById("userInfo").style.display = "block";
+        document.getElementById("name").textContent = user.username;
+        if (user.email && user.email.includes("@")) {
+          document.getElementById("email").textContent = user.email.split("@")[0];
+        }
+        document.getElementById("sign-btn").style.display = "none";
+      } else {
+        document.getElementById("userInfo").style.display = "none";
+        document.getElementById("sign-btn").style.display = "block";
+      }
+    } catch (err) {
+      console.error("Error fetching users:", err);
+    }
+  }
+
+  // --- PRODUCT RENDERING ---
+  function renderProducts(products) {
+    const listdiv = document.getElementById("carList");
+    listdiv.innerHTML = "";
+    products.forEach(p => {
+      const items = document.createElement("div");
+      items.innerHTML = `
+        <div class="card">
+          <img src="${p.image_url}" alt="${p.model}">
+          <div class="card-content">
+            <h3>${p.brand} ${p.model}</h3>
+            <p class="card-price">Price: $${p.price}</p>
+            ${p.category === 'mattress' ? `<p>Size: ${p.size}</p>` : ''}
+          </div>
+          <div class="card-actions">
+            <a class="view-btn" href="/">View</a>
+            <a class="chat-btn" href="https://wa.me/+2207367322?text=ineedcar">Whatsapp me</a>
+          </div>
+        </div>
+      `;
+      listdiv.appendChild(items);
+    });
+  }
+
+  // --- LOAD ALL PRODUCTS ---
+  async function loadProducts() {
+    try {
+      const res = await fetch("https://ns-auto-ventures.onrender.com/api/products");
+      if (!res.ok) {
+        console.error("Respond from frontend:", res.status);
+        return;
+      }
+      const data = await res.json();
+      if (data.success) {
+        renderProducts(data.products);
+      }
+    } catch (err) {
+      console.error("Error loading products:", err);
+    }
+  }
+
+  // --- FILTER PRODUCTS ---
+  async function filterProducts() {
+    const searchTerm = document.getElementById("searchInput").value.trim();
+    const query = new URLSearchParams();
+    if (searchTerm) {
+      query.append("brand", searchTerm); // or model depending on backend
+    }
+    try {
+      const res = await fetch(`https://ns-auto-ventures.onrender.com/api/products?${query.toString()}`);
+      if (!res.ok) {
+        console.error("Filter request failed:", res.status);
+        return;
+      }
+      const data = await res.json();
+      if (data.success) {
+        renderProducts(data.products);
+      }
+    } catch (err) {
+      console.error("Error filtering products:", err);
+    }
+  }
+
+  // --- INITIALIZE ---
+  signup();
+  loadProducts();
+</script>
+</body>
+</html>

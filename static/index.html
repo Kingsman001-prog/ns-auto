@@ -61,7 +61,7 @@
   // --- USER SIGNUP DISPLAY ---
   async function signup() {
     try {
-      const res = await fetch("https://ns-auto-ventures.onrender.com/api/users");
+      const res = await fetch("https://ns-auto-production.up.railway.app/api/users");
       if (!res.ok) {
         console.error("Server returned:", res.status);
         return;
@@ -111,7 +111,7 @@
   // --- LOAD ALL PRODUCTS ---
   async function loadProducts() {
     try {
-      const res = await fetch("https://ns-auto-ventures.onrender.com/api/products");
+      const res = await fetch("https://ns-auto-production.up.railway.app/api/products");
       if (!res.ok) {
         console.error("Respond from frontend:", res.status);
         return;
@@ -133,7 +133,7 @@
       query.append("brand", searchTerm); // or model depending on backend
     }
     try {
-      const res = await fetch(`https://ns-auto-ventures.onrender.com/api/products?${query.toString()}`);
+      const res = await fetch(`https://ns-auto-production.up.railway.app/api/products?${query.toString()}`);
       if (!res.ok) {
         console.error("Filter request failed:", res.status);
         return;

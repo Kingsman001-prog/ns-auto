@@ -85,31 +85,21 @@
       };
 
       try {
-        // ✅ Use your backend URL (Render/Railway/Heroku)
-        const res = await fetch("https://ns-auto-ventures.onrender.com/api/signup", {
+        const res = await fetch("https://ns-auto-production.up.railway.app/api/signup", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(user)
         });
 
-        if (!res.ok) {
-          console.error("Server returned:", res.status);
-          alert("Signup failed. Please try again.");
-          return;
-        }
-
         const data = await res.json();
 
-        if (data.success) {
+        if (res.ok && data.success) {
           alert(data.message);
-          localStorage.setItem("user_id", data.user_id);
+          localStorage.setItem("user_id", data.user_id); // ✅ Save user_id for uploads
+          form.reset();
         } else {
-          alert(data.message || data.check || "Signup failed");
+          alert(data.message || "Signup failed. Please try again.");
         }
-
-        // Reset form fields
-        form.reset();
-
       } catch (err) {
         console.error("Error during signup:", err);
         alert("An error occurred. Please try again.");

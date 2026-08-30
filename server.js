@@ -1,4 +1,4 @@
-// --- IMPORTS & SETUP ---
+// --- IMPORTS ---
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
@@ -9,13 +9,14 @@ const path = require("path");
 const bcrypt = require("bcrypt");
 const cors = require("cors");
 
+// --- APP & SERVER SETUP ---
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 const port = process.env.PORT || 3000;
 const uploadDir = path.join(__dirname, "uploads");
 
-// --- INITIAL SETUP ---
+// --- INITIALIZATION ---
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir);
   console.log(`Created uploads directory at ${uploadDir}`);
@@ -23,15 +24,14 @@ if (!fs.existsSync(uploadDir)) {
 
 app.use(express.json());
 
-// ✅ Explicitly allow your Netlify frontend
+// ✅ Allow Netlify frontend
 app.use(cors({
-  origin: [
-    "http://localhost:3000",
-    "https://ns-auto-venture.netlify.app"
-  ]
+  origin: "https://ns-auto-venture.netlify.app",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
 }));
 
-
+// Serve uploaded files
 app.use("/uploads", express.static(uploadDir));
 
 // --- MULTER CONFIG ---
@@ -41,33 +41,33 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// --- AUTH & USERS ---
+// --- AUTH & USERS ROUTES ---
 app.post("/api/signup", async (req, res) => {
   try {
-    const data = req.body;
-    if (!data.username || !data.full_name || !data.email || !data.password) {
+    const { username, full_name, email, password } = req.body;
+    if (!username || !full_name || !email || !password) {
       return res.status(400).json({ success: false, message: "All fields are required" });
     }
 
-    const existing = db.prepare("SELECT * FROM users WHERE email = ?").get(data.email);
+    const existing = db.prepare("SELECT * FROM users WHERE email = ?").get(email);
     if (existing) {
       return res.status(400).json({ success: false, message: "Email already registered" });
     }
 
-    const hash_password = await bcrypt.hash(data.password, 10);
+    const hash_password = await bcrypt.hash(password, 10);
 
     const stmt = db.prepare(`
       INSERT INTO users (username, full_name, email, password_hash, is_owner)
       VALUES (?, ?, ?, ?, ?)
     `);
-    const info = stmt.run(data.username, data.full_name, data.email, hash_password, 0);
+    const info = stmt.run(username, full_name, email, hash_password, 0);
 
     res.status(200).json({
       success: true,
       message: "Signup successfully",
       user_id: info.lastInsertRowid,
-      username: data.username,
-      email: data.email,
+      username,
+      email,
     });
   } catch (e) {
     console.error("Signup error:", e);
@@ -86,7 +86,7 @@ app.get("/api/users", (req, res) => {
   }
 });
 
-// --- PRODUCTS ---
+// --- PRODUCTS ROUTES ---
 app.get("/api/products", (req, res) => {
   try {
     const { category, brand, model, year, price_min, price_max } = req.query;
@@ -120,7 +120,7 @@ app.post("/api/products", upload.single("image"), (req, res) => {
       return res.status(400).json({ success: false, error: "User not found, please signup first" });
     }
 
-    if (!user.is_owner) {
+    if (user.is_owner != 1) {
       return res.status(403).json({ success: false, error: "Only NS Auto Ventures owner can upload products" });
     }
 

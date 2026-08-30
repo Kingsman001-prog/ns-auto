@@ -186,15 +186,12 @@
           method: "POST",
           body: formData
         });
-        
-        const data = await res.json();
 
-        if (data != 1){
-          if (!res.ok) {
-            console.error("Upload failed:", data.error);
-            alert(`Upload failed: ${data.error}`);
-            return;
-          }
+        const data = await res.json();
+        if (!res.ok) {
+          console.error("Upload failed:", data.error);
+          alert(`Upload failed: ${data.error}`);
+          return;
         }
 
         console.log("Upload successful:", data);

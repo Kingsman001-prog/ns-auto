@@ -120,7 +120,9 @@ app.post("/api/products", upload.single("image"), (req, res) => {
       return res.status(400).json({ success: false, error: "User not found, please signup first" });
     }
 
-    
+    if(!user.lastInsertRowid){
+      return res.status(400).json({success: false, error: "Sorry only NS auto venture can upload"})
+    }
 
     if (!req.file) {
       return res.status(400).json({ success: false, error: "No image uploaded" });

@@ -126,7 +126,7 @@ app.post("/api/products", upload.single("image"), (req, res) => {
       return res.status(400).json({ success: false, error: "No image uploaded" });
     }
 
-    const imagePath = "/uploads/" + req.file.filename;
+    const imagePath = "https://ns-auto-production.up.railway.app/uploads/" + req.file.filename;
 
     const stmt = db.prepare(`
       INSERT INTO products (category, brand, model, year, fuel_type, size, price, description, image_url, user_id)

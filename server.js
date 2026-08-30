@@ -27,7 +27,8 @@ app.use(express.json());
 app.use(cors({
   origin: [
     "http://localhost:3000",
-    "https://ns-auto-venture.netlify.app"
+    "https://ns-auto-venture.netlify.app",
+    "https://tranquil-stardust-b81114.netlify.app"
   ]
 }));
 

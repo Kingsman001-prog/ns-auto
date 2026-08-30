@@ -120,9 +120,7 @@ app.post("/api/products", upload.single("image"), (req, res) => {
       return res.status(400).json({ success: false, error: "User not found, please signup first" });
     }
 
-    if (user.is_owner != 1) {
-      return res.status(403).json({ success: false, error: "Only NS Auto Ventures owner can upload products" });
-    }
+    
 
     if (!req.file) {
       return res.status(400).json({ success: false, error: "No image uploaded" });

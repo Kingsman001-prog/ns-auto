@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>Mattresses | NS Auto Ventures</title>
+  <style>
+    .page-heading { padding: 2rem 1.25rem 0; color: #1e3c72; }
+    .page-heading h1 { margin-bottom: .5rem; }
+    .catalog-search { display: flex; gap: .5rem; padding: 1rem 1.25rem 0; }
+    .catalog-search input, .catalog-search button {
+      border: 1px solid #ccc; border-radius: 6px; font: inherit; padding: .7rem;
+    }
+    .catalog-search input { flex: 1; min-width: 0; }
+    .catalog-search button { background: #1e3c72; color: white; cursor: pointer; }
+    #message { padding: 1.25rem; color: #555; }
+  </style>
+</head>
+<body>
+  <header class="lp-tp-nav">
+    <nav>
+      <div class="lp-logo mb-logo"><h3>NS Auto Ventures</h3></div>
+      <ul>
+        <li><a href="index.html">All items</a></li>
+        <li><a href="index.html?category=car">Cars</a></li>
+        <li><a href="mattress.html" aria-current="page">Mattresses</a></li>
+        <li><a href="upload.html">Owner upload</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <section class="page-heading">
+      <h1>Mattresses for sale</h1>
+      <p>Browse available mattresses and contact us to ask about an item.</p>
+    </section>
+    <form class="catalog-search" id="searchForm">
+      <input id="searchInput" type="search" placeholder="Search by brand or size" aria-label="Search mattresses">
+      <button type="submit">Search</button>
+    </form>
+    <p id="message" role="status">Loading mattresses…</p>
+    <section class="car-list" id="mattressList" aria-label="Available mattresses"></section>
+  </main>
+
+  <script>
+    const API_BASE = "https://ns-auto-production.up.railway.app";
+    const mattressList = document.getElementById("mattressList");
+    const message = document.getElementById("message");
+
+    function renderMattresses(products) {
+      mattressList.replaceChildren();
+      if (products.length === 0) {
+        message.textContent = "No mattresses are available right now.";
+        return;
+      }
+      message.textContent = "";
+
+      for (const product of products) {
+        const card = document.createElement("article");
+        card.className = "card";
+        const image = document.createElement("img");
+        image.src = product.image_url || "";
+        image.alt = `${product.brand || "Mattress"} ${product.size || ""}`.trim();
+        const content = document.createElement("div");
+        content.className = "card-content";
+        const title = document.createElement("h3");
+        title.textContent = product.brand || "Mattress";
+        const price = document.createElement("p");
+        price.className = "card-price";
+        price.textContent = `Price: $${product.price}`;
+        content.append(title, price);
+        if (product.size) {
+          const size = document.createElement("p");
+          size.textContent = `Size: ${product.size}`;
+          content.append(size);
+        }
+        if (product.description) {
+          const description = document.createElement("p");
+          description.textContent = product.description;
+          content.append(description);
+        }
+
+        const actions = document.createElement("div");
+        actions.className = "card-actions";
+        const view = document.createElement("a");
+        view.className = "view-btn";
+        view.href = `product.html?id=${encodeURIComponent(product.product_id)}`;
+        view.textContent = "View details";
+        const contact = document.createElement("a");
+        contact.className = "chat-btn";
+        contact.href = `https://wa.me/2207367322?text=${encodeURIComponent(`Hello, I'm interested in the ${product.brand || "mattress"}`)}`;
+        contact.target = "_blank";
+        contact.rel = "noopener noreferrer";
+        contact.textContent = "Ask about item";
+        actions.append(view, contact);
+        card.append(image, content, actions);
+        mattressList.append(card);
+      }
+    }
+
+    async function loadMattresses(search = "") {
+      message.textContent = "Loading mattresses…";
+      const query = new URLSearchParams({ category: "mattress" });
+      if (search) {
+        query.set("search", search);
+      }
+      try {
+        const response = await fetch(`${API_BASE}/api/products?${query}`);
+        if (!response.ok) throw new Error("Could not load mattresses. Please try again.");
+        const data = await response.json();
+        if (!data.success) throw new Error(data.message || "Could not load mattresses.");
+        renderMattresses(data.products);
+      } catch (error) {
+        mattressList.replaceChildren();
+        message.textContent = error.message;
+      }
+    }
+
+    document.getElementById("searchForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      loadMattresses(document.getElementById("searchInput").value.trim());
+    });
+
+    loadMattresses();
+  </script>
+</body>
+</html>

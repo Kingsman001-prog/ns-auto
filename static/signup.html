@@ -56,10 +56,11 @@
       color: black;
       text-decoration: none;
     }
+
   </style>
 </head>
 <body>
-  <a class="signup-back" href="/"><- Back</a>
+  <a class="signup-back" href="/">< Back</a>
   <div class="signup-container">
     <h2>Create Account</h2>
     <form id="signupForm">
@@ -83,6 +84,7 @@
         email: document.getElementById("email").value.trim(),
         password: document.getElementById("password").value.trim()
       };
+      localStorage.setItem("user", JSON.stringify(user));
 
       try {
         const res = await fetch("https://ns-auto-production.up.railway.app/api/signup", {

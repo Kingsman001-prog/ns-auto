@@ -17,10 +17,10 @@
         </div>
       </div>
       <ul>
-        <li><a href="#">Car</a></li>
-        <li><a href="#">Mattress</a></li>
-        <li><a href="#">View</a></li>
-        <li><a href="/upload">Upload</a></li>
+        <li><a href="index.html?category=car">Cars</a></li>
+        <li><a href="mattress.html">Mattresses</a></li>
+        <li><a href="index.html">All items</a></li>
+        <li><a href="upload.html">Owner upload</a></li>
       </ul>
       <div class="profile">
         <a href="/signup" class="signup" id="sign-btn">Signup</a>
@@ -67,7 +67,7 @@
         return;
       }
       const data = await res.json();
-      if (data.success && data.users.length > 0) {
+      if (localStorage.getItem("user_id") == 1) {
         const user = data.users[0];
         document.getElementById("userInfo").style.display = "block";
         document.getElementById("name").textContent = user.username;
@@ -75,43 +75,72 @@
           document.getElementById("email").textContent = user.email.split("@")[0];
         }
         document.getElementById("sign-btn").style.display = "none";
-      } else {
-        document.getElementById("userInfo").style.display = "none";
+      } 
+      else{
         document.getElementById("sign-btn").style.display = "block";
+        document.getElementById("userInfo").style.display = "none";
       }
     } catch (err) {
       console.error("Error fetching users:", err);
     }
   }
 
+  const API_BASE = "https://ns-auto-production.up.railway.app";
+
   // --- PRODUCT RENDERING ---
   function renderProducts(products) {
     const listdiv = document.getElementById("carList");
     listdiv.innerHTML = "";
+    if (products.length === 0) {
+      listdiv.textContent = "No items are available right now.";
+      return;
+    }
+
     products.forEach(p => {
-      const items = document.createElement("div");
-      items.innerHTML = `
-        <div class="card">
-          <img src="${p.image_url}" alt="${p.model}">
-          <div class="card-content">
-            <h3>${p.brand} ${p.model}</h3>
-            <p class="card-price">Price: $${p.price}</p>
-            ${p.category === 'mattress' ? `<p>Size: ${p.size}</p>` : ''}
-          </div>
-          <div class="card-actions">
-            <a class="view-btn" href="/">View</a>
-            <a class="chat-btn" href="https://wa.me/+2207367322?text=ineedcar">Whatsapp me</a>
-          </div>
-        </div>
-      `;
-      listdiv.appendChild(items);
+      const card = document.createElement("article");
+      card.className = "card";
+      const image = document.createElement("img");
+      image.src = p.image_url || "";
+      image.alt = `${p.brand || ""} ${p.model || p.category}`.trim();
+      const content = document.createElement("div");
+      content.className = "card-content";
+      const title = document.createElement("h3");
+      title.textContent = `${p.brand || ""} ${p.model || ""}`.trim() || "For sale";
+      const price = document.createElement("p");
+      price.className = "card-price";
+      price.textContent = `Price: $${p.price}`;
+      content.append(title, price);
+      if (p.category === "mattress" && p.size) {
+        const size = document.createElement("p");
+        size.textContent = `Size: ${p.size}`;
+        content.append(size);
+      }
+
+      const actions = document.createElement("div");
+      actions.className = "card-actions";
+      const view = document.createElement("a");
+      view.className = "view-btn";
+      view.href = `product.html?id=${encodeURIComponent(p.product_id)}`;
+      view.textContent = "View details";
+      const contact = document.createElement("a");
+      contact.className = "chat-btn";
+      contact.href = `https://wa.me/2207367322?text=${encodeURIComponent(`Hello, I'm interested in ${title.textContent}`)}`;
+      contact.target = "_blank";
+      contact.rel = "noopener noreferrer";
+      contact.textContent = "Ask about item";
+      actions.append(view, contact);
+      card.append(image, content, actions);
+      listdiv.append(card);
     });
   }
 
   // --- LOAD ALL PRODUCTS ---
   async function loadProducts() {
     try {
-      const res = await fetch("https://ns-auto-production.up.railway.app/api/products");
+      const query = new URLSearchParams();
+      const category = new URLSearchParams(window.location.search).get("category");
+      if (category === "car") query.set("category", category);
+      const res = await fetch(`${API_BASE}/api/products?${query}`);
       if (!res.ok) {
         console.error("Respond from frontend:", res.status);
         return;
@@ -130,10 +159,10 @@
     const searchTerm = document.getElementById("searchInput").value.trim();
     const query = new URLSearchParams();
     if (searchTerm) {
-      query.append("brand", searchTerm); // or model depending on backend
+      query.append("search", searchTerm);
     }
     try {
-      const res = await fetch(`https://ns-auto-production.up.railway.app/api/products?${query.toString()}`);
+      const res = await fetch(`${API_BASE}/api/products?${query.toString()}`);
       if (!res.ok) {
         console.error("Filter request failed:", res.status);
         return;

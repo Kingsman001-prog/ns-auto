@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>Item details | NS Auto Ventures</title>
+  <style>
+    .product-page { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
+    .product-detail {
+      display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(260px, 1fr);
+      gap: 2rem; padding: 1.5rem; background: white; border-radius: 10px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.12);
+    }
+    .product-image { width: 100%; max-height: 520px; object-fit: contain; background: #f4f6f9; border-radius: 8px; }
+    .product-info h1 { color: #1e3c72; margin-bottom: 1rem; }
+    .product-info p { margin: .75rem 0; color: #444; line-height: 1.5; }
+    .product-price { font-size: 1.4rem; font-weight: 700; }
+    .product-actions { display: flex; gap: .75rem; margin-top: 1.5rem; flex-wrap: wrap; }
+    .product-actions a { padding: .8rem 1rem; border-radius: 6px; text-decoration: none; font-weight: 600; }
+    .back-link { display: inline-block; margin-bottom: 1rem; color: #1e3c72; }
+    #message { padding: 1.5rem; text-align: center; color: #555; }
+    @media (max-width: 650px) { .product-detail { grid-template-columns: 1fr; gap: 1rem; padding: 1rem; } }
+  </style>
+</head>
+<body>
+  <header class="lp-tp-nav">
+    <nav>
+      <div class="lp-logo mb-logo"><h3>NS Auto Ventures</h3></div>
+      <ul>
+        <li><a href="index.html">All items</a></li>
+        <li><a href="index.html?category=car">Cars</a></li>
+        <li><a href="mattress.html">Mattresses</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main class="product-page">
+    <a href="index.html" class="back-link" id="backLink">← Back to items</a>
+    <p id="message" role="status">Loading item details…</p>
+    <article class="product-detail" id="productDetail" style="display:none;">
+      <img class="product-image" id="productImage" alt="">
+      <section class="product-info">
+        <h1 id="productTitle"></h1>
+        <p class="product-price" id="productPrice"></p>
+        <div id="productFacts"></div>
+        <div class="product-actions">
+          <a class="view-btn" id="contactLink" target="_blank" rel="noopener noreferrer">Ask about this item</a>
+          <a class="chat-btn" href="tel:+2207367322">Call NS Auto</a>
+        </div>
+      </section>
+    </article>
+  </main>
+  <script>
+    const API_BASE = "https://ns-auto-production.up.railway.app";
+    const params = new URLSearchParams(window.location.search);
+    const productId = params.get("id");
+    const message = document.getElementById("message");
+    const detail = document.getElementById("productDetail");
+
+    async function loadProduct() {
+      if (!productId || !/^\d+$/.test(productId)) {
+        message.textContent = "This item could not be found.";
+        return;
+      }
+
+      try {
+        const response = await fetch(`${API_BASE}/api/products/${encodeURIComponent(productId)}`);
+        if (response.status === 404) {
+          message.textContent = "This item is no longer available.";
+          return;
+        }
+        if (!response.ok) throw new Error("Could not load item details. Please try again.");
+        const data = await response.json();
+        if (!data.success || !data.product) throw new Error("Could not load item details.");
+        const product = data.product;
+        const title = `${product.brand || ""} ${product.model || ""}`.trim() || "Item for sale";
+
+        document.title = `${title} | NS Auto Ventures`;
+        document.getElementById("productImage").src = product.image_url || "";
+        document.getElementById("productImage").alt = title;
+        document.getElementById("productTitle").textContent = title;
+        document.getElementById("productPrice").textContent = `Price: $${product.price}`;
+        const facts = document.getElementById("productFacts");
+        const values = [
+          ["Category", product.category],
+          ["Size", product.size],
+          ["Year", product.year],
+          ["Fuel type", product.fuel_type],
+          ["Description", product.description]
+        ];
+        for (const [label, value] of values) {
+          if (!value) continue;
+          const paragraph = document.createElement("p");
+          paragraph.textContent = `${label}: ${value}`;
+          facts.append(paragraph);
+        }
+        document.getElementById("contactLink").href =
+          `https://wa.me/2207367322?text=${encodeURIComponent(`Hello, I'm interested in ${title}`)}`;
+        document.getElementById("backLink").href =
+          product.category === "mattress" ? "mattress.html" : "index.html";
+        message.hidden = true;
+        detail.style.display = "grid";
+      } catch (error) {
+        message.textContent = error.message;
+      }
+    }
+
+    loadProduct();
+  </script>
+</body>
+</html>

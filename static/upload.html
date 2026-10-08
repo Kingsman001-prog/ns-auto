@@ -5,202 +5,381 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Upload | Njie & Sissoho Auto Ventures</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Montserrat', sans-serif;
+    :root {
+      color-scheme: light;
+      font-family: 'Montserrat', 'Segoe UI', sans-serif;
+      color: #182338;
+      background: #f3f6fb;
     }
-
+    * { box-sizing: border-box; }
     body {
-      background: #f4f6f9;
-      color: #333;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
       min-height: 100vh;
+      margin: 0;
+      background:
+        radial-gradient(ellipse at 8% 0%, rgba(77, 127, 211, .12), transparent 34rem),
+        #f3f6fb;
     }
-
     nav {
-      width: 100%;
-      background: #1e3c72;
-      color: #fff;
-      padding: 15px 30px;
+      min-height: 68px;
+      padding: 0 clamp(1rem, 5vw, 4rem);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-    }
-
-    nav .logo {
-      font-size: 1.2rem;
-      font-weight: 600;
-      letter-spacing: 1px;
-    }
-
-    nav .back {
-      cursor: pointer;
-      font-size: 1rem;
+      gap: 1rem;
       color: #fff;
-      transition: opacity 0.3s ease;
+      background: linear-gradient(115deg, #173565, #28569a);
+      box-shadow: 0 5px 18px rgba(20, 46, 83, .18);
     }
-
-    nav .back:hover {
-      opacity: 0.7;
-    }
-
+    nav .logo { font-size: 1.05rem; font-weight: 700; letter-spacing: .02em; }
+    nav .back { font-size: .92rem; }
+    .backin { color: #fff; text-decoration: none; }
+    .backin:hover { text-decoration: underline; }
     .upload-container {
+      width: min(100% - 2rem, 680px);
+      margin: clamp(2rem, 6vh, 4rem) auto;
+      padding: clamp(1.25rem, 4vw, 2.5rem);
+      border: 1px solid #e5eaf2;
+      border-radius: 20px;
       background: #fff;
-      margin-top: 40px;
-      padding: 30px;
-      border-radius: 12px;
-      width: 90%;
-      max-width: 500px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      box-shadow: 0 18px 55px rgba(26, 51, 86, .10);
     }
-
+    .form-heading { margin-bottom: 1.7rem; }
+    .eyebrow {
+      margin: 0 0 .55rem;
+      color: #4976b9;
+      font-size: .74rem;
+      font-weight: 800;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
     .upload-container h2 {
-      text-align: center;
-      margin-bottom: 25px;
-      font-size: 1.8rem;
-      color: #1e3c72;
-      letter-spacing: 1px;
+      margin: 0;
+      color: #173565;
+      font-size: clamp(1.55rem, 4vw, 2rem);
+      letter-spacing: -.035em;
     }
-
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
+    .form-intro { margin: .55rem 0 0; color: #6e7b90; font-size: .94rem; line-height: 1.55; }
+    form { display: flex; flex-direction: column; gap: 1.15rem; }
+    .field-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+    .field { display: flex; min-width: 0; flex-direction: column; gap: .48rem; }
+    .field label { color: #35445b; font-size: .85rem; font-weight: 700; }
+    .field input, .field select {
+      width: 100%;
+      min-height: 48px;
+      padding: .75rem .85rem;
+      border: 1px solid #d9e0eb;
+      border-radius: 9px;
+      outline: none;
+      color: #202c3f;
+      background: #fbfcfe;
+      font: inherit;
+      font-size: .95rem;
+      transition: border-color .16s ease, box-shadow .16s ease, background .16s ease;
     }
-
-    select, input[type="text"], input[type="file"], input[type="submit"] {
-      padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 1rem;
+    .field input::placeholder { color: #9aa5b5; }
+    .field input:focus, .field select:focus {
+      border-color: #4b78ba;
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(75, 120, 186, .14);
     }
-
-    select, input[type="text"], input[type="file"] {
-      background: #f9f9f9;
-      color: #333;
+    .field-hint { color: #7d899b; font-size: .78rem; line-height: 1.4; }
+    .price-input { position: relative; }
+    .price-input span {
+      position: absolute;
+      top: 50%;
+      left: .9rem;
+      color: #748198;
+      font-size: .92rem;
+      transform: translateY(-50%);
     }
-
-    input[type="submit"] {
-      background: #1e3c72;
-      color: #fff;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.3s ease;
-      border: none;
-    }
-
-    input[type="submit"]:hover {
-      background: #2a5298;
-    }
-
+    .price-input input { padding-left: 1.8rem; }
+    .upload-label { color: #35445b; font-size: .85rem; font-weight: 700; }
     .upload {
-      border: 2px dashed #1e3c72;
-      padding: 20px;
+      display: flex;
+      min-height: 150px;
+      align-items: center;
+      justify-content: center;
+      padding: 1.2rem;
+      border: 1.5px dashed #a9bddb;
+      border-radius: 12px;
+      background: #f8faff;
+      color: #1e3c72;
       text-align: center;
       cursor: pointer;
-      background: #fdfdfd;
+      transition: border-color .16s ease, background .16s ease;
     }
-
-    .upload:hover {
-      background: #f0f4ff;
+    .upload:hover, .upload:focus-within { border-color: #3c6db1; background: #f0f5fd; }
+    .upload-content { display: grid; justify-items: center; gap: .4rem; }
+    .upload-icon {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      border-radius: 50%;
+      background: #e8effa;
+      color: #28569a;
+      font-size: 1.35rem;
     }
-
-    @media (max-width: 600px) {
-      .upload-container {
-        padding: 20px;
-      }
-
-      .upload-container h2 {
-        font-size: 1.5rem;
-      }
+    #fileName { color: #294b7d; font-size: .92rem; font-weight: 700; }
+    .upload-hint { color: #7d899b; font-size: .78rem; }
+    #fileInput { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; clip-path: inset(50%); }
+    #fileInput:focus-visible + .upload { outline: 3px solid rgba(75, 120, 186, .35); outline-offset: 3px; }
+    .primary-button, input[type="submit"] {
+      min-height: 50px;
+      padding: .85rem 1.15rem;
+      border: 0;
+      border-radius: 9px;
+      background: linear-gradient(110deg, #1e3c72, #2a5298);
+      color: #fff;
+      font: inherit;
+      font-size: .95rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 7px 16px rgba(30, 60, 114, .18);
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+    .primary-button:hover, input[type="submit"]:hover { transform: translateY(-1px); box-shadow: 0 10px 19px rgba(30, 60, 114, .24); }
+    .primary-button:disabled { cursor: wait; opacity: .7; transform: none; }
+    #loginError { min-height: 1.2em; margin: 0; color: #b42318; font-size: .85rem; }
+    #logoutButton {
+      display: block;
+      margin: 1rem auto 0;
+      padding: .5rem .8rem;
+      border: 0;
+      background: transparent;
+      color: #53647c;
+      font: inherit;
+      font-size: .85rem;
+      cursor: pointer;
+    }
+    #logoutButton:hover { color: #b42318; text-decoration: underline; }
+    #NS { max-width: 680px; margin: 3rem auto; padding: 1rem; color: #35445b; text-align: center; }
+    #NS h1 { font-size: 1.35rem; line-height: 1.55; }
+    @media (max-width: 560px) {
+      nav { min-height: 60px; padding-inline: 1rem; }
+      nav .logo { font-size: .9rem; }
+      .field-grid { grid-template-columns: 1fr; }
+      .upload { min-height: 130px; }
     }
   </style>
 </head>
 <body>
   <nav>
     <div class="logo">Njie & Sissoho Auto Ventures</div>
-    <div class="back"><a href="/"> <- Back</a></div>
+    <div class="back"><a href="/" class="backin"> < Back</a></div>
   </nav>
+  <div id="NS" style="display: none;"><h1>Sorry only <br/> the owner of NS auto venture <br/> upload</h1></div>
+  <div class="upload-container" id="upload-container">
+    <div class="form-heading">
+      <p class="eyebrow">NS Auto Ventures · Owner access</p>
+      <h2 id="uploads">Upload Product Details</h2>
+      <p class="form-intro" id="formIntro">Sign in to manage the items shown to buyers.</p>
+    </div>
+    <form id="ownerLoginForm">
+      <div class="field">
+        <label for="ownerEmail">Owner email</label>
+        <input type="email" id="ownerEmail" placeholder="you@example.com" autocomplete="username" required>
+      </div>
+      <div class="field">
+        <label for="ownerPassword">Password</label>
+        <input type="password" id="ownerPassword" placeholder="Enter your password" autocomplete="current-password" required>
+      </div>
+      <button class="primary-button" type="submit">Sign in to upload</button>
+      <p id="loginError" role="alert"></p>
+    </form>
+    <button type="button" id="logoutButton" style="display:none;">Sign out</button>
+    <form id="uploadForm" enctype="multipart/form-data" style="display:none;">
+      <div class="field">
+        <label for="category">Item category</label>
+        <select id="category" name="category" required>
+          <option value="">Choose a category</option>
+          <option value="car">Car</option>
+          <option value="mattress">Mattress</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
 
-  <div class="upload-container">
-    <h2>Upload Product Details</h2>
-    <form id="uploadForm" enctype="multipart/form-data">
-      <!-- Product Category -->
-      <select id="category" name="category" required>
-        <option value="">Select Category</option>
-        <option value="car">Car</option>
-        <option value="mattress">Mattress</option>
-      </select>
+      <div class="field">
+        <span class="upload-label">Product photo</span>
+        <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp" aria-label="Choose a product photo" required>
+        <label class="upload" for="fileInput">
+          <span class="upload-content">
+            <span class="upload-icon" aria-hidden="true">↑</span>
+            <span id="fileName">Choose a photo to upload</span>
+            <span class="upload-hint">JPEG, PNG or WebP · up to 5 MB</span>
+          </span>
+        </label>
+      </div>
 
-      <!-- File Upload -->
-      <input type="file" id="upload" name="image" class="upload">
+      <div class="field-grid">
+        <div class="field">
+          <label for="brand">Brand</label>
+          <input type="text" id="brand" name="brand" placeholder="e.g. Toyota" autocomplete="organization" required>
+        </div>
+        <div class="field">
+          <label for="model">Model or type</label>
+          <input type="text" id="model" name="model" placeholder="e.g. Camry">
+        </div>
+      </div>
 
-      <!-- Common Fields -->
-      <input type="text" id="brand" name="brand" placeholder="Brand">
-      <input type="text" id="model" name="model" placeholder="Model / Type">
-      <input type="text" id="price" name="price" placeholder="Price">
+      <div class="field-grid">
+        <div class="field">
+          <label for="price">Price</label>
+          <div class="price-input">
+            <span aria-hidden="true">$</span>
+            <input type="number" id="price" name="price" placeholder="0.00" min="0" step="0.01" required>
+          </div>
+          <span class="field-hint">Enter the price in dollars.</span>
+        </div>
+        <div class="field" id="sizeField" style="display:none;">
+          <label for="size">Mattress size</label>
+          <input type="text" id="size" name="size" placeholder="e.g. King or Queen">
+        </div>
+      </div>
 
-      <!-- Mattress-specific field -->
-      <input type="text" id="size" name="size" placeholder="Size (e.g., King, Queen)" style="display:none;">
-
-      <input type="submit" value="Submit">
+      <button class="primary-button" id="uploadButton" type="submit">Publish item</button>
     </form>
   </div>
 
   <script>
-    const categorySelect = document.getElementById('category');
-    const sizeField = document.getElementById('size');
+    const API_BASE = "https://ns-auto-production.up.railway.app";
+    const loginForm = document.getElementById("ownerLoginForm");
+    const uploadForm = document.getElementById("uploadForm");
+    const loginError = document.getElementById("loginError");
+    const logoutButton = document.getElementById("logoutButton");
+    const categorySelect = document.getElementById("category");
+    const sizeField = document.getElementById("size");
+    const sizeFieldContainer = document.getElementById("sizeField");
+    const uploadButton = document.getElementById("uploadButton");
+    let ownerToken = localStorage.getItem("owner_token");
 
-    categorySelect.addEventListener('change', () => {
-      sizeField.style.display = categorySelect.value === 'mattress' ? 'block' : 'none';
+    function showOwnerUpload(isOwner) {
+      loginForm.style.display = isOwner ? "none" : "flex";
+      uploadForm.style.display = isOwner ? "flex" : "none";
+      logoutButton.style.display = isOwner ? "block" : "none";
+      document.getElementById("uploads").textContent = isOwner ? "Upload Product Details" : "Owner Login";
+      document.getElementById("formIntro").textContent = isOwner
+        ? "Add a clear photo and accurate details so buyers can find your item."
+        : "Sign in to manage the items shown to buyers.";
+    }
+
+    async function verifyOwner() {
+      if (!ownerToken) {
+        showOwnerUpload(false);
+        return;
+      }
+      try {
+        const response = await fetch(`${API_BASE}/api/owner/session`, {
+          headers: { Authorization: `Bearer ${ownerToken}` }
+        });
+        if (!response.ok) {
+          throw new Error("Owner session expired. Please log in again.");
+        }
+        showOwnerUpload(true);
+      } catch (error) {
+        localStorage.removeItem("owner_token");
+        ownerToken = null;
+        showOwnerUpload(false);
+        loginError.textContent = error.message;
+      }
+    }
+
+    loginForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      loginError.textContent = "";
+      try {
+        const response = await fetch(`${API_BASE}/api/owner/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: document.getElementById("ownerEmail").value.trim(),
+            password: document.getElementById("ownerPassword").value
+          })
+        });
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.message || "Owner login failed");
+        }
+        ownerToken = data.token;
+        localStorage.setItem("owner_token", ownerToken);
+        loginForm.reset();
+        showOwnerUpload(true);
+      } catch (error) {
+        loginError.textContent = error.message;
+      }
     });
 
-    document.getElementById("uploadForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const user_id = localStorage.getItem("user_id");
+    logoutButton.addEventListener("click", async () => {
+      try {
+        const response = await fetch(`${API_BASE}/api/owner/logout`, {
+          method: "POST",
+          headers: { Authorization: `Bearer ${ownerToken}` }
+        });
+        if (!response.ok) {
+          throw new Error("Logout request failed");
+        }
+      } catch (error) {
+        loginError.textContent = error.message;
+      } finally {
+        localStorage.removeItem("owner_token");
+        ownerToken = null;
+        showOwnerUpload(false);
+      }
+    });
 
+    categorySelect.addEventListener("change", () => {
+      const isMattress = categorySelect.value === "mattress";
+      sizeFieldContainer.style.display = isMattress ? "flex" : "none";
+      sizeField.required = isMattress;
+    });
+
+    document.getElementById("fileInput").addEventListener("change", (event) => {
+      const file = event.target.files[0];
+      document.getElementById("fileName").textContent = file ? file.name : "Choose a photo to upload";
+    });
+
+    uploadForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
       const formData = new FormData();
-      formData.append("category", document.getElementById("category").value);
+      formData.append("category", categorySelect.value);
       formData.append("brand", document.getElementById("brand").value);
       formData.append("model", document.getElementById("model").value);
       formData.append("price", document.getElementById("price").value);
-      formData.append("size", document.getElementById("size").value || "");
-      formData.append("year", "");
-      formData.append("fuel_type", "");
+      formData.append("size", sizeField.value || "");
       formData.append("description", "Uploaded via form");
-      formData.append("user_id", user_id);
-
-      const file = document.getElementById("upload").files[0];
-      if (file) {
-        formData.append("image", file); // ✅ matches Multer's "image"
+      const file = document.getElementById("fileInput").files[0];
+      if (!file) {
+        alert("Please select an image.");
+        return;
       }
+      formData.append("image", file);
 
       try {
-        // ✅ Use your backend API URL
-        const res = await fetch("https://ns-auto-production.up.railway.app/api/products", {
+        uploadButton.disabled = true;
+        uploadButton.textContent = "Publishing…";
+        const response = await fetch(`${API_BASE}/api/products`, {
           method: "POST",
+          headers: { Authorization: `Bearer ${ownerToken}` },
           body: formData
         });
-
-        const data = await res.json();
-        if (!res.ok) {
-          console.error("Upload failed:", data.error);
-          alert(`Upload failed: ${data.error}`);
-          return;
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.message || data.error || "Upload failed");
         }
-
-        console.log("Upload successful:", data);
         alert("Upload successful!");
-      } catch (err) {
-        console.error("Error:", err);
-        alert("An error occurred. Please try again.");
+        uploadForm.reset();
+        document.getElementById("fileName").textContent = "Choose a photo to upload";
+        sizeFieldContainer.style.display = "none";
+        sizeField.required = false;
+      } catch (error) {
+        alert(error.message);
+      } finally {
+        uploadButton.disabled = false;
+        uploadButton.textContent = "Publish item";
       }
     });
+
+    verifyOwner();
   </script>
 </body>
 </html>

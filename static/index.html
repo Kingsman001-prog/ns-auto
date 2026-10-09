@@ -61,7 +61,7 @@
   // --- USER SIGNUP DISPLAY ---
   async function signup() {
     try {
-      const res = await fetch("https://ns-auto-production.up.railway.app/api/users");
+      const res = await fetch("https://ns-auto.vercel.app/api/users");
       if (!res.ok) {
         console.error("Server returned:", res.status);
         return;
@@ -85,7 +85,7 @@
     }
   }
 
-  const API_BASE = "https://ns-auto-production.up.railway.app";
+  const API_BASE = "https://ns-auto.vercel.app";
 
   // --- PRODUCT RENDERING ---
   function renderProducts(products) {

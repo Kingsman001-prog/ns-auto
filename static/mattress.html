@@ -43,7 +43,9 @@
   </main>
 
   <script>
-    const API_BASE = "https://ns-auto-production.up.railway.app";
+    const API_BASE = window.location.protocol === "file:" || window.location.hostname === "ns-auto-venture.netlify.app"
+      ? "https://ns-auto-production.up.railway.app"
+      : window.location.origin;
     const mattressList = document.getElementById("mattressList");
     const message = document.getElementById("message");
 

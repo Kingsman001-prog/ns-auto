@@ -242,7 +242,9 @@
   </div>
 
   <script>
-    const API_BASE = "https://ns-auto.vercel.app";
+    const API_BASE = window.location.protocol === "file:" || window.location.hostname === "ns-auto-venture.netlify.app"
+      ? "https://ns-auto-production.up.railway.app"
+      : window.location.origin;
     const loginForm = document.getElementById("ownerLoginForm");
     const uploadForm = document.getElementById("uploadForm");
     const loginError = document.getElementById("loginError");

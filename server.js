@@ -16,11 +16,12 @@ const server = http.createServer(app);
 const io = new Server(server);
 const port = process.env.PORT || 3000;
 const uploadDir = path.join(__dirname, "uploads");
+const staticDir = path.join(__dirname, "static");
 const ownerEmail = process.env.OWNER_EMAIL?.trim().toLowerCase();
 const ownerPassword = process.env.OWNER_PASSWORD;
 const ownerUsername = process.env.OWNER_USERNAME || "owner";
 const ownerFullName = process.env.OWNER_FULL_NAME || "NS Auto Venture Owner";
-const publicBaseUrl = (process.env.PUBLIC_BASE_URL || "https://ns-auto-production.up.railway.app").replace(/\/+$/, "");
+const publicBaseUrl = (process.env.PUBLIC_BASE_URL || "https://ns-auto.vercel.app").replace(/\/+$/, "");
 const sessionDurationHours = 12;
 
 // --- INITIALIZATION ---
@@ -65,6 +66,12 @@ app.use(cors({
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
+
+app.get("/signup", (req, res) => res.sendFile(path.join(staticDir, "signup.html")));
+app.get("/upload", (req, res) => res.sendFile(path.join(staticDir, "upload.html")));
+app.get("/mattress", (req, res) => res.sendFile(path.join(staticDir, "mattress.html")));
+app.get("/product", (req, res) => res.sendFile(path.join(staticDir, "product.html")));
+app.use(express.static(staticDir));
 
 // Serve uploaded files
 app.use("/uploads", express.static(uploadDir));

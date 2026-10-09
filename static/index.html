@@ -58,10 +58,14 @@
   </div>
 
 <script>
+  const API_BASE = window.location.protocol === "file:" || window.location.hostname === "ns-auto-venture.netlify.app"
+    ? "https://ns-auto-production.up.railway.app"
+    : window.location.origin;
+
   // --- USER SIGNUP DISPLAY ---
   async function signup() {
     try {
-      const res = await fetch("https://ns-auto.vercel.app/api/users");
+      const res = await fetch(`${API_BASE}/api/users`);
       if (!res.ok) {
         console.error("Server returned:", res.status);
         return;
@@ -84,8 +88,6 @@
       console.error("Error fetching users:", err);
     }
   }
-
-  const API_BASE = "https://ns-auto.vercel.app";
 
   // --- PRODUCT RENDERING ---
   function renderProducts(products) {

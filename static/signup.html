@@ -84,10 +84,11 @@
         email: document.getElementById("email").value.trim(),
         password: document.getElementById("password").value.trim()
       };
-      localStorage.setItem("user", JSON.stringify(user));
-
       try {
-        const res = await fetch("https://ns-auto.vercel.app/api/signup", {
+        const apiBase = window.location.protocol === "file:" || window.location.hostname === "ns-auto-venture.netlify.app"
+          ? "https://ns-auto-production.up.railway.app"
+          : window.location.origin;
+        const res = await fetch(`${apiBase}/api/signup`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(user)

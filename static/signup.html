@@ -85,9 +85,7 @@
         password: document.getElementById("password").value.trim()
       };
       try {
-        const apiBase = window.location.protocol === "file:" || window.location.hostname === "ns-auto-venture.netlify.app"
-          ? "https://ns-auto-production.up.railway.app"
-          : window.location.origin;
+        const apiBase = "https://ns-auto.vercel.app";
         const res = await fetch(`${apiBase}/api/signup`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },

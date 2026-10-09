@@ -67,6 +67,7 @@ app.use(cors({
   credentials: true
 }));
 
+app.get("/", (req, res) => res.sendFile(path.join(staticDir, "index.html")));
 app.get("/signup", (req, res) => res.sendFile(path.join(staticDir, "signup.html")));
 app.get("/upload", (req, res) => res.sendFile(path.join(staticDir, "upload.html")));
 app.get("/mattress", (req, res) => res.sendFile(path.join(staticDir, "mattress.html")));
